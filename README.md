@@ -13,7 +13,7 @@
 
 - 测试环境：
 ```shell
-cd 项目根
+cd 项目根路径
 python manage.py shell
 ```
 ```python
