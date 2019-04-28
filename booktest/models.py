@@ -7,7 +7,7 @@ from django.db import models
 class BookInfo(models.Model):
     """定义图书模型类BookInfo"""
     btitle = models.CharField(max_length=20, blank=True, verbose_name="图书名称")  # blank=True 表示该字段表单传参时，允许包含空白字符
-    bpub_date = models.DateField(null=True, verbose_name="发布日期")  # null=True 表示该字段允许为空
+    bpub_date = models.DateField(null=True, verbose_name="发布日期")  # null=True 表示该字段允许为空(NULL)
     bread = models.IntegerField(default=0, verbose_name="阅读量")
     bcomment = models.IntegerField(default=0, verbose_name="评论量")
     logo = models.CharField(max_length=50, default='测试', verbose_name="主图片")
