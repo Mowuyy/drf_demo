@@ -1,6 +1,6 @@
 # DRF_demo  
 
-- DRF框架demo -- 模型构建、序列化器构建  
+## 一、DRF框架demo -- 模型构建、序列化器构建  
 - 模型构建：约束条件 blank、null、unique等字段的含义  
 - 序列化器：  
     - 继承基础序列化器类：serializers  
