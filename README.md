@@ -12,8 +12,11 @@
 - 序列化：从模型类 ==> 前端  
 
 - 测试环境：
- ```python
+```shell
+cd 项目根
 python manage.py shell
+```
+```python
 from booktest.models import BookInfo
 from booktest.serializers import BookInfoSerializer
 
