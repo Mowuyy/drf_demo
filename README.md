@@ -91,6 +91,7 @@ API: rest_framework.serializers.Serializer
     
     >>> data = {"btitle": "hello wold"}
     >>> serializer = BookInfoSerializer(data=data)
+    
     >>> # 1、验证字段是否合法
     >>> serializer.is_valid()  
     >>> # 2、查看错误信息
@@ -121,8 +122,10 @@ API: rest_framework.serializers.Serializer
         ```
         ```python
         >>> from booktest.serializers import BookInfoSerializer
+        
         >>> data = {"btitle": "django_drf_test", "bread": 30, "bcomment": 20}
         >>> serializer = BookInfoSerializer(data=data)
+        
         >>> serializer.is_valid()
         >>> serializer.save()
     
@@ -151,9 +154,11 @@ API: rest_framework.serializers.Serializer
         ```python
         >>> from booktest.serializers import BookInfoSerializer
         >>> from booktest.models import BookInfo
+        
         >>> book = BookInfo.objects.get(id=9)
         >>> data = {"btitle": "django_drf_test", "bread": 30, "bcomment": 20}
         >>> serializer = BookInfoSerializer(instance=book, data=data)
+        
         >>> serializer.is_valid()
         >>> serializer.save()
         ```
@@ -168,9 +173,11 @@ API: rest_framework.serializers.Serializer
         ```python
         >>> from booktest.serializers import BookInfoSerializer
         >>> from booktest.models import BookInfo
+        
         >>> book = BookInfo.objects.get(id=9)
         >>> data = {"bpub_date": date(2019, 3, 29), "bread": 80, "bcomment": 8}
         >>> serializer = BookInfoSerializer(instance=book, data=data, partial=True)
+        
         >>> serializer.is_valid()
         >>> serializer.save()
         ```
