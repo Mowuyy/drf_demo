@@ -175,5 +175,3 @@ API: rest_framework.serializers.Serializer
         >>> serializer.save()
         ```
         
-## 二、高级序列化器  
-API: 
