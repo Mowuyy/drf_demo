@@ -29,7 +29,7 @@ API: rest_framework.serializers.Serializer
     >>> # {'id': 2, 'btitle': '天龙八部', 'bpub_date': '1986-07-24', 'bread': 36, 'bcomment': 40, 'image': None}
      ```       
 
-## 2、反序列化
+### 2、反序列化
 - 从前端 ==> 模型类
 
 - 单个字段验证：validate_<field_name>
@@ -91,6 +91,7 @@ API: rest_framework.serializers.Serializer
     
     >>> data = {"btitle": "hello wold"}
     >>> serializer = BookInfoSerializer(data=data)
+  
     >>> # 1、验证字段是否合法
     >>> serializer.is_valid()  
     >>> # 2、查看错误信息
@@ -121,8 +122,10 @@ API: rest_framework.serializers.Serializer
         ```
         ```python
         >>> from booktest.serializers import BookInfoSerializer
+  
         >>> data = {"btitle": "django_drf_test", "bread": 30, "bcomment": 20}
         >>> serializer = BookInfoSerializer(data=data)
+  
         >>> serializer.is_valid()
         >>> serializer.save()
     
@@ -151,9 +154,11 @@ API: rest_framework.serializers.Serializer
         ```python
         >>> from booktest.serializers import BookInfoSerializer
         >>> from booktest.models import BookInfo
+  
         >>> book = BookInfo.objects.get(id=9)
         >>> data = {"btitle": "django_drf_test", "bread": 30, "bcomment": 20}
         >>> serializer = BookInfoSerializer(instance=book, data=data)
+  
         >>> serializer.is_valid()
         >>> serializer.save()
         ```
@@ -168,12 +173,132 @@ API: rest_framework.serializers.Serializer
         ```python
         >>> from booktest.serializers import BookInfoSerializer
         >>> from booktest.models import BookInfo
+  
         >>> book = BookInfo.objects.get(id=9)
         >>> data = {"bpub_date": date(2019, 3, 29), "bread": 80, "bcomment": 8}
         >>> serializer = BookInfoSerializer(instance=book, data=data, partial=True)
+  
         >>> serializer.is_valid()
         >>> serializer.save()
         ```
         
 ## 二、高级序列化器  
-API: 
+作用：DRF自动创建
+API: rest_framework.serializers.ModelSerializer
+
+### 1、定义所有字段：fields = '\__all__'
+
+- 测试案例
+    ```python
+    from rest_framework import serializers
+    from .models import BookInfo
+            
+    class BookInfoSerializer(serializers.ModelSerializer):
+        """图书数据序列化器"""
+        class Meta:
+            model = BookInfo
+            fields = '__all__'
+    ```
+- 序列化测试环境：shell交互 或 视图类
+    ```shell
+    cd 项目根路径
+    python manage.py shell
+    ```
+        
+    ```python
+    >>> from booktest.models import BookInfo
+    >>> from booktest.serializers import BookInfoSerializer
+  
+    >>> book = BookInfo.objects.get(id=6)
+    >>> serializer = BookInfoSerializer(book)
+    >>> serializer.data
+    ```
+- 反序列化测试环境：shell交互 或 视图类
+    ```shell
+    cd 项目根路径
+    python manage.py shell
+    ```
+        
+    ```python
+    >>> from booktest.models import BookInfo
+    >>> from booktest.serializers import BookInfoSerializer
+  
+    >>> data = {"btitle": "极限挑战"}
+    >>> serializer = BookInfoSerializer(data=data)
+    >>> serializer.is_valid()
+    >>> serializer.save()
+    ```
+    
+### 2、定义指定字段：fields = ()
+- 指定需要字段
+    ```python
+    from rest_framework import serializers
+    from .models import BookInfo
+            
+    class BookInfoSerializer(serializers.ModelSerializer):
+        """图书数据序列化器"""
+        class Meta:
+            model = BookInfo
+            fields = ('id', 'btitle', 'bpub_date')
+    ```
+- 指定不需要字段
+    ```python
+    from rest_framework import serializers
+    from .models import BookInfo
+            
+    class BookInfoSerializer(serializers.ModelSerializer):
+        """图书数据序列化器"""
+        class Meta:
+            model = BookInfo
+            exclude = ('logo',)
+    ```
+- 外键
+    - 主键关联
+        ```python
+        from rest_framework import serializers
+        from .models import HeroInfo
+  
+        class HeroInfoSerializer(serializers.ModelSerializer):
+            class Meta:
+                model = HeroInfo
+                fields = ('id', 'hname', 'hgender', 'hcontent', 'hbook')
+        ```
+    - 嵌套关联
+        ```python
+        from rest_framework import serializers
+        from .models import HeroInfo
+  
+        class HeroInfoSerializer(serializers.ModelSerializer):
+            """英雄数据序列化器"""
+            class Meta:
+                model = HeroInfo
+                fields = '__all__'
+                depth = 1 
+        ```
+    - 嵌套关联（自定义处理）
+        ```python
+        from rest_framework import serializers
+        from .models import HeroInfo, BookInfo
+  
+        class BookInfoSerializer(serializers.ModelSerializer):
+            """图书数据序列化器"""
+        
+            class Meta:
+                model = BookInfo
+                fields = '__all__'
+  
+  
+        class HeroInfoSerializer(serializers.ModelSerializer):
+            """英雄数据序列化器"""
+      
+            hbook = BookInfoSerializer(many=True)
+        
+            class Meta:
+                model = HeroInfo
+                fields = ('id', 'hname', 'hgender', 'hcontent', 'hbook')
+        ```
+### 3、约束条件：read_only_fields、extra_kwargs
+
+    
+
+    

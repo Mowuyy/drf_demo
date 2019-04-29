@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 
 from rest_framework.viewsets import ModelViewSet
-from .serializers import BookInfoSerializer
+from .serializers_base import BookInfoSerializer
 from .models import BookInfo
 
 
