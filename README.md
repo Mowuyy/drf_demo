@@ -298,7 +298,37 @@ API: rest_framework.serializers.ModelSerializer
                 fields = ('id', 'hname', 'hgender', 'hcontent', 'hbook')
         ```
 ### 3、约束条件：read_only_fields、extra_kwargs
-
+- 指定只读约束
+    ```python
+    from rest_framework import serializers
+    from .models import BookInfo
+  
+    class BookInfoSerializer(serializers.ModelSerializer):
+        """图书数据序列化器"""
+    
+        class Meta:
+            model = BookInfo
+            fields = '__all__'
+          
+            read_only_fields = ('id', 'bread', 'bcomment')
+    ```
+- 指定其他约束
+    ```python
+    from rest_framework import serializers
+    from .models import BookInfo
+    
+    class BookInfoSerializer(serializers.ModelSerializer):
+        """图书数据序列化器"""
+    
+        class Meta:
+            model = BookInfo
+            fields = '__all__'
+          
+            extra_kwargs = {
+                    'bread': {'min_value': 0, 'required': True},
+                    'bcomment': {'min_value': 0, 'required': True},
+            }
+    ```
     
 
     
