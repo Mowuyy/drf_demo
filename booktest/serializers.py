@@ -17,7 +17,7 @@ class BookInfoSerializer(serializers.ModelSerializer):
         # fields = ('id', 'btitle', 'bpub_date')  # 过滤指定字段
         # exclude = ('logo',)
 
-        # read_only_fields = ('id', 'bread', 'bcomment')  # 设置序列化只读字段
+        read_only_fields = ('id', 'bread', 'bcomment')  # 设置序列化只读字段
 
         extra_kwargs = {
                         'bread': {'min_value': 0, 'required': True},

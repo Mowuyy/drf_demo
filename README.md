@@ -261,7 +261,7 @@ API: rest_framework.serializers.ModelSerializer
         class HeroInfoSerializer(serializers.ModelSerializer):
             class Meta:
                 model = HeroInfo
-                fields = ('id', 'hname', 'hgender', 'hcontent', 'hbook')
+                fields = ('id', 'hname', 'hgender', 'hcontent', 'hbook')  # hbook为主键外键
         ```
     - 嵌套关联
         ```python
@@ -273,7 +273,7 @@ API: rest_framework.serializers.ModelSerializer
             class Meta:
                 model = HeroInfo
                 fields = '__all__'
-                depth = 1 
+                depth = 1  # 1层嵌套外键
         ```
     - 嵌套关联（自定义处理）
         ```python
@@ -291,14 +291,43 @@ API: rest_framework.serializers.ModelSerializer
         class HeroInfoSerializer(serializers.ModelSerializer):
             """英雄数据序列化器"""
       
-            hbook = BookInfoSerializer(many=True)
+            hbook = BookInfoSerializer(many=True)  # 自定义嵌套外键
         
             class Meta:
                 model = HeroInfo
                 fields = ('id', 'hname', 'hgender', 'hcontent', 'hbook')
         ```
 ### 3、约束条件：read_only_fields、extra_kwargs
-
+- 指定只读约束：read_only_fields
+    ```python
+    from rest_framework import serializers
+    from .models import BookInfo
+  
+    class BookInfoSerializer(serializers.ModelSerializer):
+        """图书数据序列化器"""
     
+        class Meta:
+            model = BookInfo
+            fields = '__all__'
+          
+            read_only_fields = ('id', 'bread', 'bcomment')
+    ```
+- 指定其他约束：extra_kwargs
+    ```python
+    from rest_framework import serializers
+    from .models import BookInfo
+    
+    class BookInfoSerializer(serializers.ModelSerializer):
+        """图书数据序列化器"""
+    
+        class Meta:
+            model = BookInfo
+            fields = '__all__'
+          
+            extra_kwargs = {
+                    'bread': {'min_value': 0, 'required': True},
+                    'bcomment': {'min_value': 0, 'required': True},
+            }
+    ```
 
     
