@@ -29,7 +29,7 @@ API: rest_framework.serializers.Serializer
     >>> # {'id': 2, 'btitle': '天龙八部', 'bpub_date': '1986-07-24', 'bread': 36, 'bcomment': 40, 'image': None}
      ```       
 
-## 2、反序列化
+### 2、反序列化
 - 从前端 ==> 模型类
 
 - 单个字段验证：validate_<field_name>
