@@ -25,18 +25,40 @@ from django.shortcuts import render
 #     serializer_class = BookInfoSerializer
 
 """
-urlpatterns = [
-    url(r'^books/$', BookInfoViewSet.as_view({
-        'get': 'list',
-        'post': 'create',
-    })),
 
-    url(r'^books/(?P<pk>\d+)/$', BookInfoViewSet.as_view({
-        'get': 'retrieve',
-        'put': 'update',
-        'delete': 'destroy'
-    })),
-]
+1、普通路由：
+
+    urlpatterns = [
+        url(r'^books/$', BookInfoViewSet.as_view({
+            'get': 'list',
+            'post': 'create',
+        })),
+    
+        url(r'^books/(?P<pk>\d+)/$', BookInfoViewSet.as_view({
+            'get': 'retrieve',
+            'put': 'update',
+            'delete': 'destroy'
+        })),
+    ]
+
+
+2、视图集默认路由：
+    router = DefaultRouter()
+    router.register(r'books', BookInfoViewSet, base_name='book')
+    
+    urlpatterns = []
+    urlpatterns += router.urls
+    
+    for urls in urlpatterns:
+        print(urls)
+    
+    生成的url:
+        list      /books/ name='books-list'
+        create    /books/ name='books-list'
+        update    /books/(?P<pk>\d+)/ name='books-detail'
+        retrieve  /books/(?P<pk>\d+)/ name='books-detail'
+        destroy   /books/(?P<pk>\d+)/ name='books-detail'
+        latest    /books/latest/ name='books-latest'
 """
 
 
