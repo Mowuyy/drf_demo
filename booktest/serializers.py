@@ -28,12 +28,12 @@ class BookInfoSerializer(serializers.ModelSerializer):
 class HeroInfoSerializer(serializers.ModelSerializer):
     """英雄数据序列化器"""
 
-    hbook = BookInfoSerializer(many=True)  # 外键自定义处理
+    hbook = BookInfoSerializer(many=True)  # 外键自定义处理，many=True表示支持查询集
 
     class Meta:
         model = HeroInfo
         # fields = '__all__'
         # depth = 1  # 指定外键关联深度（相当于Serializer类的嵌套写法）
 
-        fields = ('id', 'hname', 'hgender', 'hcontent', 'hbook')
+        fields = ('id', 'hname', 'hgender', 'hcontent', 'isDelete', 'hbook')
 

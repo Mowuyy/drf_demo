@@ -25,7 +25,7 @@ SECRET_KEY = '$t-5%qq0-7rzuo5!0=103*+(98=y2(&psqn7$aqu$=o70564o-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -112,9 +112,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-# LANGUAGE_CODE = 'en-us'
-# TIME_ZONE = 'UTC'
-
 LANGUAGE_CODE = 'zh-Hans'
 TIME_ZONE = 'Asia/Shanghai'
 
@@ -129,3 +126,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# DRF框架配置
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (  # 默认响应渲染类
+        # 'rest_framework.renderers.JSONRenderer',  # json渲染器
+        'renders.JSONRender',  # 自定义json渲染：指定字符集为utf-8
+        'rest_framework.renderers.BrowsableAPIRenderer',  # 浏览API渲染器
+    ),
+}

@@ -17,7 +17,7 @@ API: rest_framework.serializers.Serializer
     ```shell
     cd 项目根路径
     python manage.py shell
-    ```  
+    ```
     ```python
     >>> from booktest.models import BookInfo
     >>> from booktest.serializers import BookInfoSerializer
@@ -27,7 +27,7 @@ API: rest_framework.serializers.Serializer
     
     >>> serializer.data
     >>> # {'id': 2, 'btitle': '天龙八部', 'bpub_date': '1986-07-24', 'bread': 36, 'bcomment': 40, 'image': None}
-     ```       
+    ```
 
 ### 2、反序列化
 - 从前端 ==> 模型类
@@ -35,7 +35,7 @@ API: rest_framework.serializers.Serializer
 - 单个字段验证：validate_<field_name>
     ```python
     from rest_framework import serializers
-  
+    
     class BookInfoSerializer(serializers.Serializer):
         """图书数据序列化器"""
         ...
@@ -49,7 +49,7 @@ API: rest_framework.serializers.Serializer
 - 多个字段验证：validate
     ```python
     from rest_framework import serializers
-  
+    
     class BookInfoSerializer(serializers.Serializer):
         """图书数据序列化器"""
         ...
@@ -66,7 +66,7 @@ API: rest_framework.serializers.Serializer
 - 全局字段验证（针对任何序列化器-权限优先于 单个字段验证和多个字段验证）：validators
     ```python
     from rest_framework import serializers
-  
+    
     def about_drf(value):
         if 'DRF' not in value.uppper():
             raise serializers.ValidationError("图书不是关于DRF的")
@@ -91,21 +91,21 @@ API: rest_framework.serializers.Serializer
     
     >>> data = {"btitle": "hello wold"}
     >>> serializer = BookInfoSerializer(data=data)
-  
+    
     >>> # 1、验证字段是否合法
     >>> serializer.is_valid()  
     >>> # 2、查看错误信息
     >>> serializer.errors
     >>> # 3、获取验证通过后的数据
     >>> serializer.validated_data
-  
+    
     ```
     
--  新建数据
+- 新建数据
     ```python
     from rest_framework import serializers
     from booktest.models import BookInfo
-
+    
     class BookInfoSerializer(serializers.Serializer):
         """图书数据序列化器"""
         ...
@@ -114,7 +114,7 @@ API: rest_framework.serializers.Serializer
            """新建数据"""
             return BookInfo.objects.create(**validated_data)
     ```
-    
+
     - 测试环境：shell交互 或 视图类
         ```shell
         cd 项目根路径
@@ -122,13 +122,14 @@ API: rest_framework.serializers.Serializer
         ```
         ```python
         >>> from booktest.serializers import BookInfoSerializer
-  
+          
         >>> data = {"btitle": "django_drf_test", "bread": 30, "bcomment": 20}
         >>> serializer = BookInfoSerializer(data=data)
-  
+          
         >>> serializer.is_valid()
         >>> serializer.save()
-    
+        ```
+
 - 数据更新
     ```python
     from rest_framework import serializers
@@ -154,11 +155,11 @@ API: rest_framework.serializers.Serializer
         ```python
         >>> from booktest.serializers import BookInfoSerializer
         >>> from booktest.models import BookInfo
-  
+      
         >>> book = BookInfo.objects.get(id=9)
         >>> data = {"btitle": "django_drf_test", "bread": 30, "bcomment": 20}
         >>> serializer = BookInfoSerializer(instance=book, data=data)
-  
+      
         >>> serializer.is_valid()
         >>> serializer.save()
         ```
@@ -173,11 +174,11 @@ API: rest_framework.serializers.Serializer
         ```python
         >>> from booktest.serializers import BookInfoSerializer
         >>> from booktest.models import BookInfo
-  
+      
         >>> book = BookInfo.objects.get(id=9)
         >>> data = {"bpub_date": date(2019, 3, 29), "bread": 80, "bcomment": 8}
         >>> serializer = BookInfoSerializer(instance=book, data=data, partial=True)
-  
+      
         >>> serializer.is_valid()
         >>> serializer.save()
         ```
@@ -204,11 +205,11 @@ API: rest_framework.serializers.ModelSerializer
     cd 项目根路径
     python manage.py shell
     ```
-        
+    
     ```python
     >>> from booktest.models import BookInfo
     >>> from booktest.serializers import BookInfoSerializer
-  
+    
     >>> book = BookInfo.objects.get(id=6)
     >>> serializer = BookInfoSerializer(book)
     >>> serializer.data
@@ -218,11 +219,11 @@ API: rest_framework.serializers.ModelSerializer
     cd 项目根路径
     python manage.py shell
     ```
-        
+    
     ```python
     >>> from booktest.models import BookInfo
     >>> from booktest.serializers import BookInfoSerializer
-  
+    
     >>> data = {"btitle": "极限挑战"}
     >>> serializer = BookInfoSerializer(data=data)
     >>> serializer.is_valid()
@@ -257,7 +258,7 @@ API: rest_framework.serializers.ModelSerializer
         ```python
         from rest_framework import serializers
         from .models import HeroInfo
-  
+        
         class HeroInfoSerializer(serializers.ModelSerializer):
             class Meta:
                 model = HeroInfo
@@ -267,7 +268,7 @@ API: rest_framework.serializers.ModelSerializer
         ```python
         from rest_framework import serializers
         from .models import HeroInfo
-  
+        
         class HeroInfoSerializer(serializers.ModelSerializer):
             """英雄数据序列化器"""
             class Meta:
@@ -279,15 +280,16 @@ API: rest_framework.serializers.ModelSerializer
         ```python
         from rest_framework import serializers
         from .models import HeroInfo, BookInfo
-  
+          
         class BookInfoSerializer(serializers.ModelSerializer):
             """图书数据序列化器"""
         
             class Meta:
                 model = BookInfo
                 fields = '__all__'
-  
-  
+        ```
+
+
         class HeroInfoSerializer(serializers.ModelSerializer):
             """英雄数据序列化器"""
       
@@ -302,7 +304,7 @@ API: rest_framework.serializers.ModelSerializer
     ```python
     from rest_framework import serializers
     from .models import BookInfo
-  
+    
     class BookInfoSerializer(serializers.ModelSerializer):
         """图书数据序列化器"""
     
@@ -330,4 +332,51 @@ API: rest_framework.serializers.ModelSerializer
             }
     ```
 
-    
+## 三、基础类视图
+### 1、APIView、GenericAPIView
+- APIView：不与数据库交互时使用该类视图
+    - 案例1：列表页查询  
+        ```python
+        class BookListAPIView(APIView):
+        """
+        图书列表页
+        """
+
+        def get(self, request):
+            # 1、模型类交互
+            try:
+                queryset = BookInfo.objects.all()
+            except BookInfo.DoesNotExist:
+                return Response(data="您要访问的资源不存在", status=HTTP_404_NOT_FOUND)
+
+            # 2、序列化数据
+            serializer = BookInfoSerializer(queryset, many=True)
+            # 3、响应数据
+            return Response(data=serializer.data)
+        ```
+        
+    - 案例2：详情页查询
+        ```python
+        class BookDetailAPIView(APIView):
+        """
+        图书详情页
+        """
+
+        def get(self, request, pk):
+            # 1、模型类交互
+            try:
+                book = BookInfo.objects.get(pk=pk)
+            except BookInfo.DoesNotExist:
+                return Response(data="您要访问的资源不存在!", status=HTTP_404_NOT_FOUND)
+
+            # 2、序列化数据
+            serializer = BookInfoSerializer(book)
+            # 3、响应数据
+            return Response(data=serializer.data)
+        ```
+
+- GenericAPIView：与数据库交互时使用类视图
+
+      
+
+### 2、扩展类：ListModelMixin、CreateModelMixin、RetrieveModelMixin、UpdateModelMixin、DestroyModelMixin

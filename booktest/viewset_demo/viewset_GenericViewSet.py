@@ -42,27 +42,12 @@ urlpatterns = [
 
 from booktest.serializers import BookInfoSerializer
 from booktest.models import BookInfo
-from rest_framework.viewsets import ViewSet, ViewSetMixin, GenericViewSet, ModelViewSet
-from rest_framework.response import Response
-from django.http import Http404
-from rest_framework.decorators import action
+from rest_framework.viewsets import GenericViewSet
+from rest_framework import mixins
 
 
-class BookInfoViewSet(ModelViewSet):
+class BookInfoViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.CreateModelMixin, mixins.UpdateModelMixin, mixins.DestroyModelMixin, GenericViewSet):
     """视图集扩展类视图"""
     queryset = BookInfo.objects.all()
     serializer_class = BookInfoSerializer
-
-    # GET /books/latest/
-    @action(methods=['GET'], detail=False)  # detail=False 表示请求路径是复数资源，detail=True 表示请求路径是单一资源
-    def latest(self, request):
-        """查询最新图书"""
-        try:
-            book = BookInfo.objects.latest(field_name='id')
-        except BookInfo.DoesNotExist:
-            raise Http404
-
-        serializer = BookInfoSerializer(instance=book)
-        return Response(data=serializer.data)
-
 
