@@ -53,8 +53,9 @@ class BookInfoViewSet(ModelViewSet):
     queryset = BookInfo.objects.all()
     serializer_class = BookInfoSerializer
 
-    # GET /books/latest/
-    @action(methods=['GET'], detail=False)  # detail=False 表示请求路径是复数资源，detail=True 表示请求路径是单一资源
+    # GET /books/latest/         detail=False 表示请求路径是复数资源
+    # GET /books/{pk}/latest/    detail=True  表示请求路径是单一资源
+    @action(methods=['GET'], detail=False)
     def latest(self, request):
         """查询最新图书"""
         try:
@@ -64,5 +65,3 @@ class BookInfoViewSet(ModelViewSet):
 
         serializer = BookInfoSerializer(instance=book)
         return Response(data=serializer.data)
-
-
