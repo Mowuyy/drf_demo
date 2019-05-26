@@ -289,7 +289,7 @@ API: rest_framework.serializers.ModelSerializer
                 fields = '__all__'
         ```
 
-
+        ```python
         class HeroInfoSerializer(serializers.ModelSerializer):
             """英雄数据序列化器"""
       
